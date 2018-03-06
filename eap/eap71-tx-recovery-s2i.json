@@ -102,6 +102,13 @@
             "required": true
         },
         {
+            "displayName": "Project Namespace",
+            "description": "Project namespace where the template pods will be installed to. The value is used to define service account and role to permit listing pods from OpenShift API.",
+            "name": "NAMESPACE",
+            "value": "myproject",
+            "required": true
+        },
+        {
             "displayName": "JGroups Cluster Password",
             "description": "JGroups cluster password",
             "name": "JGROUPS_CLUSTER_PASSWORD",
@@ -155,7 +162,7 @@
             "apiVersion": "v1",
             "kind": "Role",
             "metadata": {
-                "name": "podslister"
+                "name": "listing-pod-role"
             },
             "rules": [
                 {
@@ -168,25 +175,28 @@
         },
         {
             "apiVersion": "v1",
+            "kind": "ServiceAccount",
+            "metadata": {
+                "name": "listing-pod"
+            }
+        },
+        {
+            "apiVersion": "v1",
             "kind": "RoleBinding",
             "metadata": {
-                "name": "default",
-                "annotations": {
-                    "description": "Default service account"
-                }
+                "name": "listing-pod"
             },
             "subjects": [
                 {
                     "kind": "ServiceAccount",
-                    "name": "default",
-                    "namespace": "${IMAGE_STREAM_NAMESPACE}"
+                    "name": "listing-pod",
+                    "namespace": "${NAMESPACE}"
                 }
             ],
             "roleRef": {
                 "kind": "Role",
-                "name": "podslister",
-                "namespace": "${IMAGE_STREAM_NAMESPACE}",
-                "apiGroup": "rbac.authorization.k8s.io"
+                "name": "listing-pod-role",
+                "namespace": "${NAMESPACE}"
             }
         },
         {
@@ -381,6 +391,7 @@
                         }
                     },
                     "spec": {
+                        "serviceAccountName": "listing-pod",
                         "terminationGracePeriodSeconds": 75,
                         "containers": [
                             {
@@ -530,6 +541,7 @@
                         }
                     },
                     "spec": {
+                        "serviceAccountName": "listing-pod",
                         "terminationGracePeriodSeconds": 75,
                         "containers": [
                             {
