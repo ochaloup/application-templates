@@ -168,8 +168,8 @@
                 {
                     "apiGroups": null,
                     "attributeRestrictions": null,
-                    "resources": ["pods"],
-                    "verbs": ["list"]
+                    "resources": ["pods", "pods/log"],
+                    "verbs": ["list", "get"]
                 }
             ]
         },
