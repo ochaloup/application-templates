@@ -166,6 +166,14 @@
             }
         },
         {
+          "kind": "ConfigMap",
+          "apiVersion": "v1",
+          "metadata": {
+              "name": "txn-recovery-marker"
+           },
+          "data": {}
+        },
+        {
             "apiVersion": "v1",
             "kind": "RoleBinding",
             "metadata": {
@@ -179,7 +187,7 @@
             ],
             "roleRef": {
                 "kind": "Role",
-                "name": "view"
+                "name": "edit"
             }
         },
         {
